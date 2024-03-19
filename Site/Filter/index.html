@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuários e Bairros</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="wrapper">
+        <div id="search-container">
+            <input type="search" id="search-input" placeholder="Pesquisar por Nome.." />
+            <button id="search">Search</button>
+        </div>
+        <div id="buttons">
+            <div class="filter-title">Filtrar por bairro:</div>
+            <div id="bairro-container">
+                <button class="button-value" onclick="filterUsersByNeighborhood('todos')">Todos</button>
+                <!-- Botões de filtro de bairro serão adicionados dinamicamente aqui -->
+            </div>
+        </div>
+        <div id="users"></div>
+    </div>
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

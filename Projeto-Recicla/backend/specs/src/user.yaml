@@ -1,0 +1,189 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        usuario_id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        rua:
+          type: string
+        num_casa:
+          type: string
+        bairro:
+          type: string
+        cep:
+          type: string
+        cpf:
+          type: string
+        cnpj:
+          type: string
+        
+        role:
+          type: string
+          default: user
+          enum:
+            - "admin"
+            - "user"
+            - "enterprise"
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        rua:
+          type: string
+        num_casa:
+          type: string
+        bairro:
+          type: string
+        cep:
+          type: string
+        cpf:
+          type: string
+        cnpj:
+          type: string
+        
+        role:
+          type: string
+          default: user
+          enum:
+            - "admin"
+            - "user"
+            - "enterprise"
+  UserCrud: 
+    get:
+      tags:
+        - 'user'
+      summary: get all user
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                type: array 
+                items: 
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                $ref: '../swagger.yaml#/components/schemas/BackendException'
+    post:
+      tags:
+        - 'user'
+      summary: create new user
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '200':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                type: array 
+                items: 
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                $ref: '../swagger.yaml#/components/schemas/BackendException'
+    put:
+      tags:
+        - 'user'
+      summary: Update user
+      security: 
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                type: array 
+                items: 
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                $ref: '../swagger.yaml#/components/schemas/BackendException'
+  GetOneOrDelete: 
+    get:
+      tags:
+        - 'user'
+      security: 
+        - bearerAuth: []
+      summary: get user by id
+      parameters: 
+        - in: path 
+          name: usuario_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+             application/json:
+              schema:  
+                $ref: '#/components/schemas/User'
+        '404':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                $ref: '../swagger.yaml#/components/schemas/BackendException'
+    delete:
+      tags:
+        - 'user'
+      summary: delete user by id
+      security: 
+        - bearerAuth: []
+      parameters: 
+        - in: path 
+          name: usuario_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string 
+        '404':
+          description: ''
+          content:
+             application/json:
+              schema: 
+                $ref: '../swagger.yaml#/components/schemas/BackendException'

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #094d1e66;
+            padding: 10px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        #response {
+            font-size: 18px;
+        }
+
+        .user-column {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 4px;
+        }
+
+        .user-info {
+            margin-bottom: 10px;
+        }
+
+        #searchbar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #bairro-filter {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #list li {
+            padding: 10px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        #list li:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class='navbar'>
+        <a href="#" onclick="fazerRequisicao()">Enviar requisição GET</a>
+    </div>
+    
+    <div class="content">
+        <input id="searchbar" onkeyup="searchUsers()" type="text" name="search" placeholder="Pesquise usuários por CPF.." autocomplete="off">
+        <input id="bairro-filter" onkeyup="searchUsers()" type="text" name="bairro" placeholder="Filtre por bairro.." autocomplete="off">
+        <div id="response"></div>
+    </div>
+
+    <script>
+        function fazerRequisicao() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var users = JSON.parse(this.responseText);
+                    exibirDados(users);
+                }
+            };
+            xhttp.open('GET', 'http://localhost:4466/user', true);
+            xhttp.send();
+        }
+
+        function exibirDados(data) {
+            var responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = '';
+
+            data.forEach(function(user) {
+                var userColumn = document.createElement('div');
+                userColumn.className = 'user-column';
+
+                var userFields = ['cpf', 'cnpj', 'nome', 'bairro', 'email', 'cep'];
+
+                var p = document.createElement('p');
+                p.className = 'user-info';
+                if (user.cpf == null) {
+                    p.innerHTML = 'CNPJ: ' + user.cnpj;
+                } else {
+                    p.innerHTML = 'CPF: ' + user.cpf;
+                }
+                userColumn.appendChild(p);
+
+                var detailsVisible = false;
+
+                p.addEventListener('click', function() {
+                    var details = userColumn.getElementsByClassName('user-details')[0];
+                    if (!detailsVisible) {
+                        userFields.forEach(function(field) {
+                            if (user[field] !== null && field !== 'cpf' && field !== 'cnpj') {
+                                var p = document.createElement('p');
+                                p.className = 'user-info';
+                                p.innerHTML = field.toUpperCase() + ': ' + user[field];
+                                details.appendChild(p);
+                            }
+                        });
+                        detailsVisible = true;
+                    } else {
+                        details.innerHTML = '';
+                        detailsVisible = false;
+                    }
+                });
+
+                var details = document.createElement('div');
+                details.className = 'user-details';
+                userColumn.appendChild(details);
+
+                responseDiv.appendChild(userColumn);
+            });
+        }
+
+        function searchUsers() {
+            var input, bairroFilter, ul, li, i, txtValue;
+            input = document.getElementById('searchbar');
+            bairroFilter = document.getElementById('bairro-filter');
+            ul = document.getElementById("response");
+            li = ul.getElementsByClassName('user-column');
+
+            var inputText = input.value.toUpperCase();
+            var bairroText = bairroFilter.value.toUpperCase();
+
+            for (i = 0; i < li.length; i++) {
+                var cpfCnpj = li[i].getElementsByClassName('user-info')[0].innerText.toUpperCase();
+                var bairro = li[i].getElementsByClassName('user-info')[3].innerText.toUpperCase();
+
+                if ((cpfCnpj.indexOf(inputText) > -1) && (bairro.indexOf(bairroText) > -1)) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        window.onload = fazerRequisicao;
+    </script>
+</body>
+</html>

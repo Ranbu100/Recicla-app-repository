@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  usuario_id   Int       @id @default(autoincrement())
+  nome         String
+  email        String    @unique
+  senha        String
+  rua          String
+  num_casa     String
+  bairro       String
+  cep          String
+  cpf          String?   @unique
+  cnpj         String?   @unique
+  role         UserRole  @default(user)
+  central_user Central[]
+}
+
+model Central {
+  id_central Int    @id @default(autoincrement())
+  descricao  String
+  usuario_id Int
+  Usuario    User   @relation(fields: [usuario_id], references: [usuario_id])
+}
+
+model Noticias {
+  noticia_id Int    @id @default(autoincrement())
+  link       String
+  imagem     String
+  manchete   String
+}
+
+enum UserRole {
+  admin
+  user
+  enterprise
+}

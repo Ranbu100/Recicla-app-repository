@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="import" href="cadastroapi.js">
+    <title>Botao api</title>
+</head>
+<body>
+    <button id="apiButton">Atualizar</button>
+
+    <script>
+        document.getElementById('apiButton'), addEventListener(click, () => {
+            fech('http://localhost:4466/user')
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message)
+            })
+            .catch(error => {
+                console.error('erro:', error)
+            })
+        })
+        
+
+    </script>
+</body>
+</html>
