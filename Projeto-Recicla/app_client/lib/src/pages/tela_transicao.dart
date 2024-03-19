@@ -38,7 +38,10 @@ class _TransitionPageState extends State<TransitionPage> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.mail),
+                    Icon(
+                      Icons.mail,
+                      color: Colors.white,
+                    ),
                     SizedBox(width: 3),
                     Text(
                       'Continuar com e-mail',

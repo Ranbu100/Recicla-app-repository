@@ -36,7 +36,7 @@ class _AppWidgetState extends State<AppWidget> {
     return MaterialApp.router(
       title: 'Recicla',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.lightGreen,
       ),
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,

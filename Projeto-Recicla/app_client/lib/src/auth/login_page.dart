@@ -86,7 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                     _showErrorSnackbar(validate);
                   }
                 },
-                child: const Text('Entrar'),
+                child: const Text('Entrar',
+                    style: TextStyle(
+                      color: Colors.green,
+                    )),
               ),
             ],
           ),
