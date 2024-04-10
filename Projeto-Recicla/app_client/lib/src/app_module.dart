@@ -17,7 +17,7 @@ class AppModule extends Module {
   @override
   List<Bind<Object>> get binds => [
         Bind.singleton((i) {
-          final uno = Uno(baseURL: 'http://localhost:4466');
+          final uno = Uno(baseURL: 'http://192.168.140.79:4466');
           uno.interceptors.request.use(addToken);
           uno.interceptors.response.use(
             (response) => response,
