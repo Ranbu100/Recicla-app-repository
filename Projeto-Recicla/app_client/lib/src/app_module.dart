@@ -2,22 +2,22 @@ import 'package:app_client/src/auth/login_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modular_triple_bind/modular_triple_bind.dart';
 import 'package:uno/uno.dart';
-import 'package:app_client/src/home/homepage.dart';
+import 'package:app_client/src/home/pages/homepage.dart';
 import 'package:app_client/src/resgistration/cadastro_page.dart';
-import 'package:app_client/src/pages/onboarding_screen.dart';
+import 'package:app_client/src/onboarding/onboarding_screen.dart';
 import 'package:app_client/src/pages/tela_transicao.dart';
 import 'auth/interceptors/interceptors.dart';
 import 'auth/stores/auth_store.dart';
-import 'home/ajuda.dart';
-import 'home/calendario.dart';
-import 'home/meulixo.dart';
-import 'home/myaccount.dart';
+import 'home/pages/ajuda.dart';
+import 'home/pages/calendario.dart';
+import 'home/pages/meulixo.dart';
+import 'home/pages/myaccount.dart';
 
 class AppModule extends Module {
   @override
   List<Bind<Object>> get binds => [
         Bind.singleton((i) {
-          final uno = Uno(baseURL: 'http://192.168.140.79:4466');
+          final uno = Uno(baseURL: 'http://192.168.21.79:4466');
           uno.interceptors.request.use(addToken);
           uno.interceptors.response.use(
             (response) => response,

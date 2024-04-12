@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'models/product.dart';
+import '../models/product.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _HelpPageState extends State<HelpPage> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('fundojuda.png'),
+                image: AssetImage('images/fundojuda.png'),
                 fit: BoxFit.cover,
               ),
             ),

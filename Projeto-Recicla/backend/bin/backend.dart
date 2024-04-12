@@ -6,11 +6,11 @@ void main(List<String> arguments) async {
   final handler = await startShelfModular();
 
   // Verifica todas as interfaces de rede para encontrar uma associada ao IP desejado
-  var serverAddress = await _findIPv4Address('192.168.140.79');
+  var serverAddress = await _findIPv4Address('192.168.21.79');
 
   if (serverAddress == null) {
     print(
-        'Endereço IP 192.168.140.79 não encontrado na lista de interfaces de rede.');
+        'Endereço IP $serverAddress não encontrado na lista de interfaces de rede.');
     return;
   }
 

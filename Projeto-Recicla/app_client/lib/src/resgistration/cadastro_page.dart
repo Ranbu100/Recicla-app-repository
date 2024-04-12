@@ -33,7 +33,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   Future<void> _registerUser(BuildContext context) async {
     try {
-      String apiUrl = 'http://192.168.140.79:4466';
+      String apiUrl = 'http://192.168.21.79:4466';
 
       User user = User(
         nome: nomeController.text,
@@ -138,7 +138,7 @@ class _RegistrationPageState extends State<RegistrationPage>
           children: [
             Positioned.fill(
               child: Image.asset(
-                "6.png",
+                "images/6.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -424,6 +424,7 @@ class _RegistrationPageState extends State<RegistrationPage>
       ),
     );
   }
+  // SurfaceView
 
   Widget _buildBairroDropdown(String label) {
     return Container(

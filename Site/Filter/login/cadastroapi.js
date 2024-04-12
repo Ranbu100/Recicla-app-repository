@@ -12,7 +12,7 @@ let validUsuario = false
 
 let senha = document.querySelector('#senha')
 let labelSenha = document.querySelector('#labelSenha')
-let validSenha = false
+let validSenha = false     
 
 let confirmSenha = document.querySelector('#confirmSenha')
 let labelConfirmSenha = document.querySelector('#labelConfirmSenha')

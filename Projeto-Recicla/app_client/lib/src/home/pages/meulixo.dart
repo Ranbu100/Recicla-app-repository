@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'roudedbutton.dart';
+import '../features/roudedbutton.dart';
 
 class MeuLixo extends StatefulWidget {
   const MeuLixo({super.key});

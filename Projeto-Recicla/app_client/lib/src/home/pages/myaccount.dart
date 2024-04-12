@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -40,8 +42,8 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
       _usuarioEmail = usuarioEmail!;
     });
 
-    final response =
-        await http.get(Uri.parse('http://localhost:4466/user/$_usuarioEmail'));
+    final response = await http
+        .get(Uri.parse('http://192.168.21.79:4466/user/$_usuarioEmail'));
 
     if (response.statusCode == 200) {
       final userData = json.decode(response.body);
@@ -71,7 +73,7 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
       'cep': _cepController.text,
     };
     final response = await http.put(
-      Uri.parse('http://localhost:4466/up/$_usuarioEmail'),
+      Uri.parse('http://192.168.140.79:4466/up/$_usuarioEmail'),
       body: jsonEncode(updatedUserData),
     );
 
@@ -112,7 +114,7 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  "fundojuda.png",
+                  "images/fundojuda.png",
                 ),
                 fit: BoxFit.cover,
               ),

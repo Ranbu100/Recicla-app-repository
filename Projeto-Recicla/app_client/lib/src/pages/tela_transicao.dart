@@ -93,7 +93,7 @@ class _TransitionPageState extends State<TransitionPage> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: Image.asset("8.png", fit: BoxFit.cover),
+            child: Image.asset('images/8.png', fit: BoxFit.cover),
           ),
           _body()
         ],

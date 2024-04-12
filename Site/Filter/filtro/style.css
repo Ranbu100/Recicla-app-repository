@@ -7,7 +7,10 @@
     font-family: "Poppins", sans-serif;
 }
 body {
-    background-color: #f5f8ff;
+    background-image: url(green\ neutrals\ desktop.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 .wrapper {

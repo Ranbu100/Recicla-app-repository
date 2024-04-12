@@ -12,11 +12,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
   final List<String> imageAssets = [
-    '1.png',
-    '2.png',
-    '3.png',
-    '4.png',
-    '5.png',
+    'images/1.png',
+    'images/2.png',
+    'images/3.png',
+    'images/4.png',
+    'images/5.png',
   ];
   @override
   Widget build(BuildContext context) {

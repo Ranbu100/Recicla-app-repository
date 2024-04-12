@@ -1,4 +1,4 @@
-package com.example.app_client
+package com.example.app_recicla
 
 import io.flutter.embedding.android.FlutterActivity
 

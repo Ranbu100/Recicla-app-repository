@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../auth/stores/auth_store.dart';
-import 'cardmenu.dart';
+import '../../auth/stores/auth_store.dart';
+import '../features/cardmenu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -141,8 +141,10 @@ class HomePageState extends State<HomePage> {
                             }
                             return InformationPage(
                               imagePath: index == 0
-                                  ? 'pag1.jpeg'
-                                  : (index == 1 ? 'pag2.jpeg' : 'pag3.jpeg'),
+                                  ? 'images/pag1.jpeg'
+                                  : (index == 1
+                                      ? 'images/pag2.jpeg'
+                                      : 'images/pag3.jpeg'),
                               url: url,
                             );
                           },
@@ -169,14 +171,14 @@ class HomePageState extends State<HomePage> {
                             Modular.to.navigate('/home/date');
                           },
                           title: 'dia da coleta',
-                          icon: 'icones.png',
+                          icon: 'images/icones.png',
                         ),
                         cardmenu(
                           ontap: () {
                             Modular.to.navigate('/home/lixo');
                           },
                           title: 'meu lixo',
-                          icon: 'caminhaoofc.jpg',
+                          icon: 'images/caminhaoofc.jpg',
                           color: const Color.fromARGB(255, 255, 255, 255),
                           fontcolor: Colors.grey,
                           //164,255,164,1.000)
@@ -194,7 +196,7 @@ class HomePageState extends State<HomePage> {
                               Modular.to.navigate('/home/conta');
                             },
                             title: 'conta',
-                            icon: 'pessoa.jpg',
+                            icon: 'images/pessoa.jpg',
                             fontcolor: Colors.grey,
                             color: const Color.fromARGB(255, 255, 255, 255)),
                         cardmenu(
@@ -202,7 +204,7 @@ class HomePageState extends State<HomePage> {
                             Modular.to.navigate('/home/ajuda');
                           },
                           title: 'ajuda',
-                          icon: 'ajuda.jpg',
+                          icon: 'images/ajuda.jpg',
                           color: const Color.fromARGB(255, 255, 255, 255),
                           fontcolor: Colors.grey,
                         ),
