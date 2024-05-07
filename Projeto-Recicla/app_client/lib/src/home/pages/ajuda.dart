@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../auth/stores/auth_store.dart';
 import '../models/product.dart';
 
 class HelpPage extends StatefulWidget {
@@ -11,6 +12,16 @@ class HelpPage extends StatefulWidget {
 
 class _HelpPageState extends State<HelpPage> {
   final List<Product> _products = Product.generateItems(3);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
+  void _logout() {
+    final store = Modular.get<AuthStore>();
+    store.logout(); // Chamar método de logout no AuthStore
+  }
 
   // Mapa que associa cada ID a um texto de pergunta específico
   final Map<int, String> questionMap = {
@@ -26,6 +37,63 @@ class _HelpPageState extends State<HelpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Página Inicial'),
+              onTap: () {
+                Modular.to.pushNamed('/home');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month_outlined),
+              title: const Text('Calendário'),
+              onTap: () {
+                Modular.to.pushNamed('/home/date');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.pest_control_rodent_sharp),
+              title: const Text('Meu Lixo'),
+              onTap: () {
+                Modular.to.pushNamed('/home/lixo');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Minha Conta'),
+              onTap: () {
+                Modular.to.pushNamed('/home/conta');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Ajuda'),
+              onTap: () {
+                Modular.to.pushNamed('/home/ajuda');
+              },
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    _logout();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: const Text(
           'Ajuda',
@@ -41,6 +109,16 @@ class _HelpPageState extends State<HelpPage> {
             Modular.to.navigate('/home');
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.bar_chart_rounded,
+              size: 28,
+              color: Colors.white,
+            ),
+            onPressed: _openDrawer,
+          ),
+        ],
       ),
       body: Stack(
         children: [

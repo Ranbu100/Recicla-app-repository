@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:convert';
 
 import 'package:brasil_fields/brasil_fields.dart';
@@ -19,6 +21,7 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage>
     with SingleTickerProviderStateMixin {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController cellController = TextEditingController();
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController ruaController = TextEditingController();
@@ -33,11 +36,12 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   Future<void> _registerUser(BuildContext context) async {
     try {
-      String apiUrl = 'http://192.168.21.79:4466';
+      String apiUrl = 'http://localhost:4466/user';
 
       User user = User(
         nome: nomeController.text,
         email: emailController.text,
+        telefone: cellController.text,
         senha: senhaController.text,
         rua: ruaController.text,
         numCasa: numcasaController.text,
@@ -49,8 +53,9 @@ class _RegistrationPageState extends State<RegistrationPage>
       );
 
       User enterprise = User(
-        nome: nomeController.text,
-        email: emailController.text,
+        nome: empresaController.text,
+        email: emailempresaController.text,
+        telefone: cellController.text,
         senha: senhaController.text,
         rua: ruaController.text,
         numCasa: numcasaController.text,
@@ -97,10 +102,10 @@ class _RegistrationPageState extends State<RegistrationPage>
   int currentTabIndex = 0;
 
   final List<String> bairros = [
-    'Bairro 1',
-    'Bairro 2',
-    'Bairro 3',
-    'Bairro 4',
+    'Fazendinha',
+    'Violete',
+    'Nova Aldeota',
+    'Cacimbas',
   ];
 
   String? selectedBairro;
@@ -155,13 +160,13 @@ class _RegistrationPageState extends State<RegistrationPage>
                       const Tab(
                         icon: Icon(
                           Icons.person,
-                          color: Colors.green,
+                          color: Colors.black,
                         ),
                       ),
                       const Tab(
                         icon: Icon(
                           Icons.business,
-                          color: Colors.green,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -179,7 +184,7 @@ class _RegistrationPageState extends State<RegistrationPage>
               ],
             ),
             Positioned(
-              top: 0,
+              top: 5,
               left: 0,
               child: IconButton(
                 color: Colors.white,
@@ -196,61 +201,61 @@ class _RegistrationPageState extends State<RegistrationPage>
   }
 
   Widget _buildCadastroPessoa() {
-    return SingleChildScrollView(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(bottom: 10, left: 40, right: 40, top: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTextField(emailController, "Email", Icons.email),
-                const SizedBox(height: 5),
-                _buildTextField(
-                    nomeController, "Nome Completo", Icons.account_box),
-                const SizedBox(height: 5),
-                _buildNumericCpfTextField(
-                    cpfController, "CPF (Somente números)", Icons.person),
-                const SizedBox(height: 5),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: _buildTextField(
-                          ruaController, "Rua", Icons.maps_home_work),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      flex: 1,
-                      child: _buildTextNumCasaField(numcasaController, "Nº"),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                _buildCEPTextField(
-                    cepController, "CEP (Somente números)", Icons.co_present),
-                const SizedBox(height: 5),
-                _buildBairroDropdown("Bairro"),
-                const SizedBox(height: 5),
-                _buildPasswordTextField(senhaController, "Senha"),
-                const SizedBox(height: 15),
-                _buildRegisterButton(),
-                const SizedBox(
-                  height: 250,
-                ),
-                Text(
-                  mensagemErro,
-                  style: const TextStyle(
-                    color: Colors.red,
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding:
+              const EdgeInsets.only(bottom: 10, left: 40, right: 40, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField(emailController, "Email", Icons.email),
+              const SizedBox(height: 5),
+              _buildNumericCellField(cellController, "Telefone", Icons.numbers),
+              const SizedBox(height: 5),
+              _buildTextField(
+                  nomeController, "Nome Completo", Icons.account_box),
+              const SizedBox(height: 5),
+              _buildNumericCpfTextField(
+                  cpfController, "CPF (Somente números)", Icons.person),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: _buildTextField(
+                        ruaController, "Rua", Icons.maps_home_work),
                   ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: _buildTextNumCasaField(numcasaController, "Nº"),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              _buildCEPTextField(
+                  cepController, "CEP (Somente números)", Icons.co_present),
+              const SizedBox(height: 5),
+              _buildBairroDropdown("Bairro"),
+              const SizedBox(height: 5),
+              _buildPasswordTextField(senhaController, "Senha"),
+              const SizedBox(height: 15),
+              _buildRegisterButton(),
+              const SizedBox(
+                height: 250,
+              ),
+              Text(
+                mensagemErro,
+                style: const TextStyle(
+                  color: Colors.red,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -265,6 +270,8 @@ class _RegistrationPageState extends State<RegistrationPage>
             children: [
               _buildTextField(
                   emailempresaController, "Email da Empresa", Icons.email),
+              const SizedBox(height: 5),
+              _buildNumericCellField(cellController, "Telefone", Icons.numbers),
               const SizedBox(height: 5),
               _buildTextField(
                   empresaController, "Nome da Empresa", Icons.business),
@@ -328,10 +335,33 @@ class _RegistrationPageState extends State<RegistrationPage>
     );
   }
 
+  Widget _buildNumericCellField(
+      TextEditingController controller, String label, IconData icon) {
+    return TextField(
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        TelefoneInputFormatter(),
+      ],
+      controller: controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        suffixIcon: Icon(
+          icon,
+          color: Colors.grey.withOpacity(0.5),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTextNumCasaField(
       TextEditingController controller, String label) {
     return TextField(
       controller: controller,
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: label,
         border: OutlineInputBorder(

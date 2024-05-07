@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class TransitionPage extends StatefulWidget {
-  const TransitionPage({super.key});
+  const TransitionPage({Key? key}) : super(key: key); // Correção aqui
 
   @override
   State<TransitionPage> createState() => _TransitionPageState();
@@ -12,75 +12,60 @@ class _TransitionPageState extends State<TransitionPage> {
   Widget _body() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 100,
-          top: 10,
-          right: 100,
-          bottom: 10,
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 600,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.6),
+            ElevatedButton(
+              onPressed: () {
+                Modular.to.pushNamed('/auth/login');
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                backgroundColor: Colors.green,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Modular.to.navigate('/auth/login');
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.mail,
+                    color: Colors.white,
                   ),
-                  backgroundColor: Colors.green,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.mail,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 3),
-                    Text(
-                      'Continuar com e-mail',
-                      style: TextStyle(fontSize: 10, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                ),
-                child: OutlinedButton(
-                  onPressed: () {
-                    Modular.to.navigate('/user');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Continuar com e-mail',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Não tem uma conta? Clique aqui',
-                        style: TextStyle(fontSize: 7.5, color: Colors.green),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                Modular.to.pushNamed('/user');
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
-            ],
-          ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Não tem uma conta? Clique aqui',
+                    style: TextStyle(fontSize: 14, color: Colors.green),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -90,12 +75,10 @@ class _TransitionPageState extends State<TransitionPage> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Image.asset('images/8.png', fit: BoxFit.cover),
+          Image.asset('images/8.png', fit: BoxFit.cover),
+          Center(
+            child: _body(),
           ),
-          _body()
         ],
       ),
     );

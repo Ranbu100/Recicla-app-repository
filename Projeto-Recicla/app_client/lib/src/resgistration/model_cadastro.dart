@@ -1,6 +1,7 @@
 class User {
   final String nome;
   final String email;
+  final String telefone;
   final String senha;
   final String rua;
   final String numCasa;
@@ -13,6 +14,7 @@ class User {
   User({
     required this.nome,
     required this.email,
+    required this.telefone,
     required this.senha,
     required this.rua,
     required this.numCasa,
@@ -27,6 +29,7 @@ class User {
     return {
       'nome': nome,
       'email': email,
+      'telefone': telefone,
       'senha': senha,
       'rua': rua,
       'num_casa': numCasa,

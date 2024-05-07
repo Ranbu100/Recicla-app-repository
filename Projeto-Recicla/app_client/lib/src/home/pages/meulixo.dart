@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import '../../auth/stores/auth_store.dart';
 import '../features/roudedbutton.dart';
 
 class MeuLixo extends StatefulWidget {
@@ -11,10 +12,74 @@ class MeuLixo extends StatefulWidget {
 }
 
 class _MeuLixoState extends State<MeuLixo> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _logout() {
+    final store = Modular.get<AuthStore>();
+    store.logout(); // Chamar método de logout no AuthStore
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.indigo.shade50,
+      drawer: Drawer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Página Inicial'),
+              onTap: () {
+                Modular.to.pushNamed('/home');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month_outlined),
+              title: const Text('Calendário'),
+              onTap: () {
+                Modular.to.pushNamed('/home/date');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.pest_control_rodent_sharp),
+              title: const Text('Meu Lixo'),
+              onTap: () {
+                Modular.to.pushNamed('/home/lixo');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Minha Conta'),
+              onTap: () {
+                Modular.to.pushNamed('/home/conta');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Ajuda'),
+              onTap: () {
+                Modular.to.pushNamed('/home/ajuda');
+              },
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    _logout();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
           child: Container(
         margin: const EdgeInsets.only(top: 18, left: 24, right: 24),
@@ -31,12 +96,14 @@ class _MeuLixoState extends State<MeuLixo> {
                       Icons.arrow_back_ios,
                       color: Color.fromARGB(255, 71, 162, 75),
                     )),
-                const RotatedBox(
-                  quarterTurns: 135,
-                  child: Icon(
+                IconButton(
+                  onPressed: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                  icon: const Icon(
                     Icons.bar_chart_rounded,
-                    color: Color.fromARGB(255, 71, 162, 75),
                     size: 28,
+                    color: Color.fromARGB(255, 71, 162, 75),
                   ),
                 ),
               ],

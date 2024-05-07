@@ -1,5 +1,6 @@
 import 'package:app_client/src/auth/states/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'auth/stores/auth_store.dart';
@@ -15,7 +16,7 @@ class _AppWidgetState extends State<AppWidget> {
   @override
   void initState() {
     super.initState();
-
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     final store = context.read<AuthStore>();
 
     store.observer(onState: (state) {

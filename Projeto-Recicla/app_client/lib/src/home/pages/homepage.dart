@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -61,9 +63,43 @@ class HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: Column(
           children: [
-            const ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Página Inicial'),
+            SizedBox(
+              height: 10,
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Página Inicial'),
+              onTap: () {
+                Modular.to.pushNamed('/home');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month_outlined),
+              title: const Text('Calendário'),
+              onTap: () {
+                Modular.to.pushNamed('/home/date');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.pest_control_rodent_sharp),
+              title: const Text('Meu Lixo'),
+              onTap: () {
+                Modular.to.pushNamed('/home/lixo');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Minha Conta'),
+              onTap: () {
+                Modular.to.pushNamed('/home/conta');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Ajuda'),
+              onTap: () {
+                Modular.to.pushNamed('/home/ajuda');
+              },
             ),
             Expanded(
               child: Align(
@@ -119,35 +155,66 @@ class HomePageState extends State<HomePage> {
                       child: SizedBox(
                         height: carouselHeight,
                         width: screenWidth,
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: 3,
-                          onPageChanged: (int page) {
-                            setState(() {
-                              _currentPage = page;
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            final Uri? url;
-                            if (index == 0) {
-                              url = Uri.parse(
-                                  'https://itapipoca.ce.gov.br/informa.php?id=574');
-                            } else if (index == 1) {
-                              url = Uri.parse(
-                                  'https://itapipoca.ce.gov.br/informa.php?id=580');
-                            } else {
-                              url = Uri.parse(
-                                  'https://itapipoca.ce.gov.br/informa.php?id=572');
-                            }
-                            return InformationPage(
-                              imagePath: index == 0
-                                  ? 'images/pag1.jpeg'
-                                  : (index == 1
-                                      ? 'images/pag2.jpeg'
-                                      : 'images/pag3.jpeg'),
-                              url: url,
-                            );
-                          },
+                        child: Stack(
+                          children: [
+                            PageView.builder(
+                              controller: _pageController,
+                              itemCount: 3,
+                              onPageChanged: (int page) {
+                                setState(() {
+                                  _currentPage = page;
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                final Uri? url;
+                                String headline = '';
+                                if (index == 0) {
+                                  url = Uri.parse(
+                                      'https://itapipoca.ce.gov.br/informa.php?id=574');
+                                  headline = 'Manchete da Página 1';
+                                } else if (index == 1) {
+                                  url = Uri.parse(
+                                      'https://itapipoca.ce.gov.br/informa.php?id=580');
+                                  headline = 'Manchete da Página 2';
+                                } else {
+                                  url = Uri.parse(
+                                      'https://itapipoca.ce.gov.br/informa.php?id=572');
+                                  headline = 'Manchete da Página 3';
+                                }
+                                return InformationPage(
+                                  imagePath: index == 0
+                                      ? 'images/pag1.jpeg'
+                                      : (index == 1
+                                          ? 'images/pag2.jpeg'
+                                          : 'images/pag3.jpeg'),
+                                  url: url,
+                                  headline: headline,
+                                );
+                              },
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List<Widget>.generate(3, (int index) {
+                                  return Container(
+                                    width: 10.0,
+                                    height: 10.0,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: _currentPage == index
+                                          ? Colors.white
+                                          : Colors.grey.shade400,
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -168,20 +235,19 @@ class HomePageState extends State<HomePage> {
                       children: [
                         cardmenu(
                           ontap: () {
-                            Modular.to.navigate('/home/date');
+                            Modular.to.pushNamed('/home/date');
                           },
                           title: 'dia da coleta',
                           icon: 'images/icones.png',
                         ),
                         cardmenu(
                           ontap: () {
-                            Modular.to.navigate('/home/lixo');
+                            Modular.to.pushNamed('/home/lixo');
                           },
                           title: 'meu lixo',
                           icon: 'images/caminhaoofc.jpg',
                           color: const Color.fromARGB(255, 255, 255, 255),
                           fontcolor: Colors.grey,
-                          //164,255,164,1.000)
                         ),
                       ],
                     ),
@@ -192,16 +258,17 @@ class HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         cardmenu(
-                            ontap: () {
-                              Modular.to.navigate('/home/conta');
-                            },
-                            title: 'conta',
-                            icon: 'images/pessoa.jpg',
-                            fontcolor: Colors.grey,
-                            color: const Color.fromARGB(255, 255, 255, 255)),
+                          ontap: () {
+                            Modular.to.pushNamed('/home/conta');
+                          },
+                          title: 'conta',
+                          icon: 'images/pessoa.jpg',
+                          fontcolor: Colors.grey,
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                        ),
                         cardmenu(
                           ontap: () {
-                            Modular.to.navigate('/home/ajuda');
+                            Modular.to.pushNamed('/home/ajuda');
                           },
                           title: 'ajuda',
                           icon: 'images/ajuda.jpg',
@@ -224,11 +291,13 @@ class HomePageState extends State<HomePage> {
 class InformationPage extends StatelessWidget {
   final String imagePath;
   final Uri? url;
+  final String headline;
 
   const InformationPage({
     Key? key,
     required this.imagePath,
     required this.url,
+    required this.headline,
   });
 
   @override
@@ -237,11 +306,44 @@ class InformationPage extends StatelessWidget {
       onTap: () {
         _launchURL(context, url!);
       },
-      child: Image.asset(
-        imagePath,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Imagem do carrossel com camada escura sobreposta
+          Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Container(
+            color: Colors.black.withOpacity(0.5), // Camada escura
+          ),
+          // Texto da manchete com fundo preto
+          Positioned(
+            bottom: 16,
+            left: 16, // Alinha com a borda esquerda do carrossel
+            child: Container(
+              padding: EdgeInsets.only(left: 16, right: 32, top: 8, bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(32.0),
+                  bottomRight: Radius.circular(32.0),
+                ),
+              ),
+              child: Text(
+                headline,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -253,13 +355,5 @@ class InformationPage extends StatelessWidget {
     )) {
       throw "Não foi possível abrir a URL";
     }
-    //  else {
-    //   // Exiba uma mensagem de erro para o usuário
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Não foi possível abrir a URL.'),
-    //     ),
-    //   );
-    // }
   }
 }

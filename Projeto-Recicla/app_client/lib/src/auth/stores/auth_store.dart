@@ -33,6 +33,8 @@ class AuthStore extends StreamStore<AuthException, AuthState> {
         // Salvando o email nos SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_email', credential.email.value);
+      } else if (statusCode == 403) {
+        setError(AuthException('Erro Senha ou Email Incorretos', null));
       } else {
         setError(AuthException('Erro no login: $statusCode', null));
       }

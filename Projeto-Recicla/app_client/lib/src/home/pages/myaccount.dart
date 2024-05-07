@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,8 +14,9 @@ class MinhaContaScreen extends StatefulWidget {
 }
 
 class _MinhaContaScreenState extends State<MinhaContaScreen> {
-  String _usuarioEmail = ''; // Email do usuário recuperado do SharedPreferences
-  Map<String, dynamic> _userData = {}; // Dados do usuário
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _usuarioEmail = '';
+  Map<String, dynamic> _userData = {};
 
   final TextEditingController _ruaController = TextEditingController();
   final TextEditingController _numCasaController = TextEditingController();
@@ -26,7 +25,7 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
 
-  bool _editingEnabled = false; // Estado de edição dos campos de texto
+  bool _editingEnabled = false;
 
   @override
   void initState() {
@@ -42,16 +41,14 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
       _usuarioEmail = usuarioEmail!;
     });
 
-    final response = await http
-        .get(Uri.parse('http://192.168.21.79:4466/user/$_usuarioEmail'));
+    final response =
+        await http.get(Uri.parse('http://localhost:4466/user/$_usuarioEmail'));
 
     if (response.statusCode == 200) {
       final userData = json.decode(response.body);
 
       setState(() {
         _userData = userData;
-
-        // Preencher os campos de texto com os dados do usuário
         _ruaController.text = _userData['rua'];
         _emailController.text = _userData['email'];
         _numCasaController.text = _userData['num_casa'];
@@ -60,7 +57,6 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
         _nomeController.text = _userData['nome'];
       });
     } else {
-      // Tratar erro de busca de dados do usuário
       print('Erro ao buscar dados do usuário: ${response.body}');
     }
   }
@@ -73,18 +69,16 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
       'cep': _cepController.text,
     };
     final response = await http.put(
-      Uri.parse('http://192.168.140.79:4466/up/$_usuarioEmail'),
+      Uri.parse('http://localhost:4466/up/$_usuarioEmail'),
       body: jsonEncode(updatedUserData),
     );
 
     if (response.statusCode == 200) {
-      // Atualizar os dados na tela
       _getUserData();
       setState(() {
-        _editingEnabled = false; // Desabilitar a edição após a atualização
+        _editingEnabled = false;
       });
     } else {
-      // Tratar erro de atualização
       print('Erro ao atualizar dados: ${response.body}');
     }
   }
@@ -92,11 +86,15 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text(
           'Minha Conta',
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -113,82 +111,80 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  "images/fundojuda.png",
-                ),
+                image: AssetImage("images/fundojuda.png"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Nome:'),
-                  controller: _nomeController,
-                  enabled: false,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Email:'),
-                  controller: _emailController,
-                  enabled: false,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Rua:'),
-                  controller: _ruaController,
-                  enabled: _editingEnabled,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Número da Casa:'),
-                  controller: _numCasaController,
-                  enabled: _editingEnabled,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Bairro:'),
-                  controller: _bairroController,
-                  enabled: _editingEnabled,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'CEP:'),
-                  controller: _cepController,
-                  enabled: _editingEnabled,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (!_editingEnabled) {
-                      setState(() {
-                        _editingEnabled = true;
-                      });
-                    } else {
-                      _updateUserData();
-                    }
-                  },
-                  child: Text(
-                    _editingEnabled ? 'Atualizar Dados' : 'Editar',
-                    style: TextStyle(color: Colors.green),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Nome:'),
+                    controller: _nomeController,
+                    enabled: false,
                   ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                if (_editingEnabled)
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Email:'),
+                    controller: _emailController,
+                    enabled: false,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Rua:'),
+                    controller: _ruaController,
+                    enabled: _editingEnabled,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Número da Casa:'),
+                    controller: _numCasaController,
+                    enabled: _editingEnabled,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Bairro:'),
+                    controller: _bairroController,
+                    enabled: _editingEnabled,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'CEP:'),
+                    controller: _cepController,
+                    enabled: _editingEnabled,
+                  ),
+                  SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        _editingEnabled = false;
-                        _getUserData(); // Reseta os campos para os dados atuais
-                      });
+                      if (!_editingEnabled) {
+                        setState(() {
+                          _editingEnabled = true;
+                        });
+                      } else {
+                        _updateUserData();
+                      }
                     },
                     child: Text(
-                      'Cancelar',
-                      style: TextStyle(color: Colors.red),
+                      _editingEnabled ? 'Atualizar Dados' : 'Editar',
+                      style: TextStyle(color: Colors.green),
                     ),
                   ),
-              ],
+                  const SizedBox(height: 15),
+                  if (_editingEnabled)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _editingEnabled = false;
+                          _getUserData(); // Reseta os campos para os dados atuais
+                        });
+                      },
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
