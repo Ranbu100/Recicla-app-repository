@@ -12,20 +12,9 @@ class DotEnvService {
   }
 
   void _init() {
-    final file = File('.env');
-    final envText = file.readAsStringSync();
-
-    for (var line in envText.split('\n')) {
-      if (line.isEmpty) {
-        continue;
-      }
-
-      final lineBreak = line.split('=');
-      if (lineBreak.length != 2) {
-        continue;
-      }
-      _map[lineBreak[0]] = lineBreak[1].trim();
-    }
+    _map['DATABASE_URL'] =
+        Platform.environment['DATABASE_URL'] ?? 'default_database_url';
+    _map['JWT_KEY'] = Platform.environment['JWT_KEY'] ?? 'default_jwt_key';
   }
 
   String? operator [](String key) {

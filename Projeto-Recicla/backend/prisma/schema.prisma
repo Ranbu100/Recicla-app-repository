@@ -9,7 +9,7 @@ model User {
   email        String    @unique
   telefone     String    @unique
   senha        String
-  rua          String
+  rua          String    
   num_casa     String
   bairro       String
   cep          String
@@ -17,6 +17,27 @@ model User {
   cnpj         String?   @unique
   role         UserRole  @default(user)
   central_user Central[]
+  score_panel  Score[]
+  agendamentos Agendamentos[]
+}
+
+model Score {
+  id_score      Int      @id @default(autoincrement())
+  qntd_residuos Int
+  date_          DateTime
+  email         String
+  Usuario       User     @relation(fields: [email], references: [email])
+}
+
+model Agendamentos {
+  id_agendamento Int @id @default(autoincrement())
+  data_agendamento DateTime
+  horario DateTime
+  status String @default("Pendente")
+  tipo_residuo String
+  quantidade_residuo String
+  usuario_id Int
+  Usuario    User   @relation(fields: [usuario_id], references: [usuario_id])
 }
 
 model Central {
@@ -28,9 +49,9 @@ model Central {
 
 model Noticias {
   noticia_id Int    @id @default(autoincrement())
-  link       String
   imagem     String
   manchete   String
+  link_      String
 }
 
 enum UserRole {

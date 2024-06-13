@@ -37,6 +37,7 @@ Middleware corsMiddleware() {
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
           'Access-Control-Allow-Headers':
               'Origin, Content-Type, Accept, Authorization',
+          ...request.headers, // Mantém os cabeçalhos da solicitação original
         });
       }
 
@@ -47,6 +48,7 @@ Middleware corsMiddleware() {
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers':
             'Origin, Content-Type, Accept, Authorization',
+        ...request.headers, // Mantém os cabeçalhos da solicitação original
       });
     };
   };

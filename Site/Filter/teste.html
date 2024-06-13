@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUT Request Example</title>
+</head>
+<body>
+    <h1>Enviar Imagem da Notícia</h1>
+    <form id="newsForm">
+        <label for="link_">Link:</label>
+        <input type="text" id="link_" name="link_" required><br><br>
+
+        <label for="imagem">Imagem:</label>
+        <input type="text" id="imagem" name="imagem" required><br><br>
+
+        <label for="manchete">Manchete:</label>
+        <input type="text" id="manchete" name="manchete" required><br><br>
+
+        <label for="noticia_id">ID da Notícia:</label>
+        <input type="text" id="noticia_id" name="noticia_id" required><br><br>
+
+        <button type="button" onclick="sendPutRequest()">Enviar</button>
+    </form>
+
+    <script>
+        async function sendPutRequest() {
+            const form = document.getElementById('newsForm');
+            const formData = new FormData(form);
+
+            const data = {
+                link_: formData.get('link_'),
+                imagem: formData.get('imagem'),
+                manchete: formData.get('manchete'),
+                noticia_id: formData.get('noticia_id')
+            };
+
+            try {
+                const response = await fetch('http://Samsung_050420:4466/news/image', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    console.log('Success:', result);
+                    alert('Notícia atualizada com sucesso!');
+                } else {
+                    console.error('Error:', result);
+                    alert('Erro ao atualizar a notícia: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Erro ao enviar a requisição: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

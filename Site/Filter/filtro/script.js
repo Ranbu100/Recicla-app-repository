@@ -1,6 +1,6 @@
 // Função para carregar os usuários e bairros
 function fetchUsers() {
-    axios.get('http://192.168.69.79:4466/user')
+    axios.get('http://Samsung_050420:4466/user')
         .then(function (response) {
             let users = response.data;
             displayUsers(users);
