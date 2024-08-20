@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuários e Bairros</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" />
+    
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            width: 80%;
+            padding: 10px;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #search {
+            padding: 10px 20px;
+            border: none;
+            background-color: green; /* Alterando a cor para verde */
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px; /* Espaçamento abaixo dos botões */
+        }
+
+        .filter-title {
+            margin-right: 20px;
+            font-weight: 500;
+        }
+
+        .button-value {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background-color: green; /* Alterando a cor para verde */
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 700px;
+        }
+
+        #users {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .user-card {
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+        }
+
+        /* Estilos do menu lateral */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .openbtn {
+            font-size: 30px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .openbtn:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="animation.html">Home</a>
+        <a href="agendamentos-pendentes.html">Agendamentos Pendentes</a>
+        <a href="agendamentos-aceitos.html">Agendamentos Aceitos</a>
+        <a href="peso.html">informações de peso</a>
+        <a href="imagem.html">Envio de imagens</a>
+        <a href="index.html">Filtro bairros</a>
+        <a href="formulario.html">Central de Ajuda</a>
+        <a href="perfil.html">Sobre Nós</a>
+    </div>
+    <button class="openbtn" onclick="openNav()">
+        <i class="ri-menu-line"></i>
+    </button>
+
+    <div class="wrapper">
+        <div id="search-container">
+            <input type="search" id="search-input" placeholder="Pesquisar por Nome.." />
+            <button id="search">Search</button>
+        </div>
+        <div id="buttons">
+            <div class="filter-title">Filtrar por bairro:</div>
+            <div id="bairro-container">
+                <button class="button-value" onclick="filterUsersByNeighborhood('todos')">Todos</button>
+                <!-- Botões de filtro de bairro serão adicionados dinamicamente aqui -->
+            </div>
+        </div>
+        <div id="users"></div>
+    </div>
+
+    <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+</body>
+</html>

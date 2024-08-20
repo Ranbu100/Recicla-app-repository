@@ -21,7 +21,7 @@ class News {
 Future<List<News>> _getNews() async {
   final List<News> newsList = [];
 
-  final response = await http.get(Uri.parse('http://localhost:4466/news'));
+  final response = await http.get(Uri.parse('http://localhost:1212/news'));
   if (response.statusCode == 200) {
     final List<dynamic> jsonData = json.decode(response.body);
     for (var data in jsonData) {

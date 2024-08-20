@@ -1,35 +1,43 @@
-# Use a imagem Dart para compilar a aplicação
+# Estágio de construção
 FROM dart:2.17.6 AS build
+
+WORKDIR /app
+
+# Copie todos os arquivos necessários para o diretório de trabalho
+COPY . .
+
+# Instale as dependências do Dart
+RUN dart pub get
+
+# Verifique se o arquivo server.dart está acessível
+RUN ls -la bin/backend.dart
+
+# Compile o aplicativo Dart
+RUN dart compile exe bin/backend.dart -o /app/bin/backend
+
+# Estágio de execução
+FROM debian:latest
+
+# Instale dependências necessárias, como libpq para PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev
 
 # Defina o diretório de trabalho
 WORKDIR /app
 
-# Copie os arquivos pubspec e obtenha as dependências
-COPY pubspec.* ./
-RUN dart pub get
-
-# Copie o código-fonte da aplicação
-COPY . .
-
-# Garanta que os pacotes estejam atualizados, mesmo offline
-RUN dart pub get --offline
-
-# Compile a aplicação para um executável AOT
-RUN dart compile exe bin/backend.dart -o bin/server
-
-# Use uma imagem mínima para a execução
-FROM gcr.io/distroless/base-debian10
-
 # Copie os arquivos necessários da imagem de build
-COPY --from=build /app/bin/server /server
-COPY --from=build /app/specs /specs
+COPY --from=build /app/bin/backend /app/backend
+COPY --from=build /app/specs /app/specs
+COPY wait-for-it.sh /app/wait-for-it.sh
+
+# Adicionar permissão de execução para wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
 # Defina as variáveis de ambiente
-ENV DATABASE_URL=postgresql://postgres:qwe123@localhost:5432/postgres
-ENV JWT_KEY=dihfiUHFoiudhfosfF1e5sf1s1f5f1EF15
+ENV DB_HOST=34.95.225.54
+ENV DB_PORT=3306
+ENV DB_USER=postgres
+ENV DB_PASSWORD=yourpassword
+ENV DB_NAME=postgres
 
-# Exponha a porta em que o servidor vai rodar
-EXPOSE 4466
-
-# Comando para iniciar o servidor
-CMD ["/server"]
+# Comando para iniciar o aplicativo
+CMD ["/app/wait-for-it.sh", "34.95.225.54:3306", "--", "/app/server"]

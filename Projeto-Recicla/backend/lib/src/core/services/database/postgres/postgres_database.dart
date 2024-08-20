@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:backend/src/core/services/database/remote_database.dart';
 import 'package:backend/src/core/services/dot_env/dot_env_service.dart';
 import 'package:postgres/postgres.dart';
@@ -15,18 +14,24 @@ class PostgresDatabase implements RemoteDatabase, Disposable {
 
   _init() async {
     final url = dotEnv['DATABASE_URL']!;
-
     final uri = Uri.parse(url);
 
     var connection = PostgreSQLConnection(
-      uri.host,
-      uri.port,
-      uri.pathSegments.first,
-      username: uri.userInfo.split(':').first,
-      password: uri.userInfo.split(':').last,
+      'localhost',
+      5432,
+      'postgres',
+      username: 'postgres',
+      password: 'qwe123',
     );
-    await connection.open();
-    completer.complete(connection);
+
+    try {
+      await connection.open();
+      completer.complete(connection);
+      print('Conexão com o banco de dados estabelecida com sucesso.');
+    } catch (e) {
+      print('Erro ao conectar ao banco de dados: $e');
+      completer.completeError(e);
+    }
   }
 
   @override
@@ -35,7 +40,6 @@ class PostgresDatabase implements RemoteDatabase, Disposable {
     Map<String, dynamic> variables = const {},
   }) async {
     final connection = await completer.future;
-
     return await connection.mappedResultsQuery(
       queryText,
       substitutionValues: variables,

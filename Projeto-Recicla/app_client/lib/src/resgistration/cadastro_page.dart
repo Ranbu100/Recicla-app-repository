@@ -36,7 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage>
 
   Future<void> _registerUser(BuildContext context) async {
     try {
-      String apiUrl = 'http://localhost:4466/user';
+      String apiUrl = 'http://localhost:1212/user';
 
       User user = User(
         nome: nomeController.text,

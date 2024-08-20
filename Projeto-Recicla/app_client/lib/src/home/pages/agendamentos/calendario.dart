@@ -21,8 +21,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   final Map<DateTime, List<dynamic>> _events = {};
 
-  final TextEditingController _eventController = TextEditingController();
-
   void _logout() {
     final store = Modular.get<AuthStore>();
     store.logout(); // Chamar método de logout no AuthStore
@@ -40,7 +38,7 @@ class _CalendarPageState extends State<CalendarPage> {
       drawer: Drawer(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ListTile(
@@ -155,46 +153,37 @@ class _CalendarPageState extends State<CalendarPage> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'Eventos:',
+                    'Deseja fazer o agendamento de uma coleta?',
                     style: TextStyle(
+                      color: Colors.green,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _events[_selectedDay]?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_events[_selectedDay]![index]),
-                      );
-                    },
+                  const SizedBox(
+                    height: 20,
                   ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _eventController,
-                    decoration: InputDecoration(
-                      labelText: 'Novo evento',
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          if (_eventController.text.isNotEmpty) {
-                            setState(() {
-                              if (_events[_selectedDay] == null) {
-                                _events[_selectedDay] = [];
-                              }
-                              _events[_selectedDay]!.add(_eventController.text);
-                              _eventController.clear();
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.add),
-                      ),
-                    ),
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12))),
+                              backgroundColor: Colors.green.shade100),
+                          onPressed: () {
+                            Modular.to.pushNamed('/home/date/ag');
+                          },
+                          child: const Text(
+                            "Agendar",
+                            style: TextStyle(color: Colors.green),
+                          )),
+                    ],
+                  )
                 ],
               ),
             ),

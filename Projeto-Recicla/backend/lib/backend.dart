@@ -7,7 +7,7 @@ Future<Handler> startShelfModular() async {
   final handler = Modular(module: AppModule(), middlewares: [
     logRequests(),
     jsonResponse(),
-    corsMiddleware(),
+    corsMiddleware(), // Certifique-se de que o middleware CORS está antes de outros middlewares que possam alterar a resposta
   ]);
   return handler;
 }
@@ -18,7 +18,7 @@ Middleware jsonResponse() {
       var response = await handler(request);
 
       response = response.change(headers: {
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
         ...response.headers,
       });
 
@@ -37,7 +37,6 @@ Middleware corsMiddleware() {
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
           'Access-Control-Allow-Headers':
               'Origin, Content-Type, Accept, Authorization',
-          ...request.headers, // Mantém os cabeçalhos da solicitação original
         });
       }
 
@@ -48,7 +47,8 @@ Middleware corsMiddleware() {
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers':
             'Origin, Content-Type, Accept, Authorization',
-        ...request.headers, // Mantém os cabeçalhos da solicitação original
+        ...response
+            .headers, // Certifique-se de manter os cabeçalhos da resposta original
       });
     };
   };

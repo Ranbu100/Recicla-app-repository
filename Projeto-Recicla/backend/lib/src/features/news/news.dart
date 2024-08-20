@@ -24,7 +24,7 @@ class NewsResource extends Resource {
         .toList();
 
     final query =
-        'UPDATE "Noticias" SET ${columns.join(',')} WHERE noticia_id = @noticia_id RETURNING noticia_id, link_, imagem, manchete;';
+        'UPDATE "noticias" SET ${columns.join(',')} WHERE noticia_id = @noticia_id RETURNING noticia_id, link_, imagem, manchete;';
 
     final database = injector.get<RemoteDatabase>();
     final result = await database.query(
@@ -33,7 +33,7 @@ class NewsResource extends Resource {
     );
 
     if (result.isNotEmpty) {
-      final newsMap = result.map((element) => element['Noticias']).first;
+      final newsMap = result.map((element) => element['noticias']).first;
       return Response.ok(jsonEncode(newsMap));
     } else {
       return Response.notFound(
@@ -44,7 +44,7 @@ class NewsResource extends Resource {
   FutureOr<Response> getImage(Injector injector) async {
     final database = injector.get<RemoteDatabase>();
     final result = await database
-        .query('SELECT noticia_id, link_, imagem, manchete FROM "Noticias";');
+        .query('SELECT noticia_id, imagem, manchete, link_ FROM "Noticias"');
 
     final listNews = result.map((e) => e['Noticias']).toList();
     return Response.ok(jsonEncode(listNews));

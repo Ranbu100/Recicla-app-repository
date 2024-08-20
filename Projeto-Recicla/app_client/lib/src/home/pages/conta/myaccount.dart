@@ -44,7 +44,7 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
     });
 
     final response =
-        await http.get(Uri.parse('http://localhost:4466/user/$_usuarioEmail'));
+        await http.get(Uri.parse('http://localhost:1212/user/$_usuarioEmail'));
 
     if (response.statusCode == 200) {
       final userData = json.decode(response.body);
@@ -71,7 +71,7 @@ class _MinhaContaScreenState extends State<MinhaContaScreen> {
       'cep': _cepController.text,
     };
     final response = await http.put(
-      Uri.parse('http://localhost:4466/up/$_usuarioEmail'),
+      Uri.parse('http://34.125.40.41:4466/up/$_usuarioEmail'),
       body: jsonEncode(updatedUserData),
     );
 

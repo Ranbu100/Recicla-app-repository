@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: 34.95.225.54
+      DB_PORT: 3306
+      DB_USER: postgres
+      DB_PASSWORD: yourpassword
+      DB_NAME: postgres
+    ports:
+      - "8080:8080"
+    restart: always
+
+  db:
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: postgres
+    ports:
+      - "3306:3306"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

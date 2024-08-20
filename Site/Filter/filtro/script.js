@@ -1,14 +1,15 @@
 // Função para carregar os usuários e bairros
 function fetchUsers() {
-    axios.get('http://Samsung_050420:4466/user')
-        .then(function (response) {
-            let users = response.data;
-            displayUsers(users);
-            loadNeighborhoods(users);
-        })
-        .catch(function (error) {
-            console.error('Erro ao carregar usuários:', error);
-        });
+    axios.get('http://localhost:1212/user')
+    .then(function (response) {
+        let users = response.data;
+        displayUsers(users);
+        loadNeighborhoods(users);
+    })
+    .catch(function (error) {
+        console.error('Erro ao carregar usuários:', error);
+    });
+
 }
 
 // Função para exibir os usuários na tela

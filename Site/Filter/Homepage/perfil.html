@@ -4,32 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+    rel="stylesheet">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,500&display=swap');
-      </style>
+    </style>
 
     <style type="text/css" title="MiltinEstilol" media="all">
-        
         *{
             font-family: 'Ubuntu', sans-serif;
             margin: 0;
             padding: 0;
-        ;
         }
 
         body{
             font-family: 'Ubuntu', sans-serif;
             text-align: center;
-            background-image: url(green\ neutrals\ desktop.jpeg);
+            background-image: url("back\ recicla.jpg");
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
+        }
 
+        .negrito{
+            color: green;
         }
 
         .header > h1{
-            color: #1c1c1c;
+            color: green;
             padding: 15px;
         }
 
@@ -61,6 +64,7 @@
         }
 
         .about{
+            color: green;
             background-color: transparent;
             margin-left: 200px;
             margin-right: 200px;
@@ -70,13 +74,13 @@
         }
 
         .about > h1{
-            color: #1c1c1c;
+            color: green;
             padding: 15px;
             font-size: 1.25em;
         }
 
         .detalhes > h1{
-            color: #1c1c1c;
+            color: green;
             padding: 15px;
             font-size: 1.25em;
         }
@@ -86,43 +90,105 @@
         }
 
         p{
-            color: black;
+            color: #fff;
             padding: 10px;
-
         }
 
-      
+        /* Estilos do menu lateral */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .openbtn {
+            font-size: 30px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .openbtn:hover {
+            background-color: #444;
+        }
     </style>
 </head>
 <body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="animation.html">Home</a>
+        <a href="agendamentos-pendentes.html">Agendamentos Pendentes</a>
+        <a href="agendamentos-aceitos.html">Agendamentos Aceitos</a>
+        <a href="peso.html">informações de peso</a>
+        <a href="imagem.html">Envio de imagens</a>
+        <a href="index.html">Filtro bairros</a>
+        <a href="formulario.html">Central de Ajuda</a>
+        <a href="perfil.html">Sobre Nós</a>
+    </div>
+    <button class="openbtn" onclick="openNav()">
+        <i class="ri-menu-line"></i>
+    </button>
+
     <div class="header">
         <h1>Perfil</h1>
-        <p>
-        Somos o instituo do meio ambiente
-        </p>
-        <img src="perfil.png" alt="" srcset="">
+        <p>Somos o instituo do meio ambiente</p>
+        <img src="perfil.png" alt="Perfil">
 
         <div class="about">
             <h2>Sobre nós</h2>
-
             <p>O Instituto do Meio Ambiente desempenha um papel essencial na preservação e gestão sustentável dos recursos naturais. Sua missão abrange a fiscalização e regulamentação de atividades que impactam o meio ambiente, além do fomento à conscientização ambiental. A pesquisa e monitoramento são fundamentais para entender as mudanças e implementar estratégias de conservação. Colaborando com órgãos governamentais, ONGs e comunidades locais, o instituto visa promover a harmonia entre desenvolvimento humano e a preservação do ecossistema, assegurando um futuro sustentável para as gerações vindouras.</p>
         </div>
     </div>
 
     <div class="detalhes">
         <h1>Detalhes</h1>
-
-        <span class="negrito">Nome do proejto: </span> <p>Projeto recicla</p>
+        <span class="negrito">Nome do projeto: </span> <p>Projeto recicla</p>
         <span class="negrito">Telefone para contato: </span> <p>88 9999 9999</p>
-        <span class="negrito">Localizaçao: </span> <p>Municipio de Itapipoca</p>
-
+        <span class="negrito">Localização: </span> <p>Município de Itapipoca</p>
     </div>
 
     <div class="footer">
-
-        <img src="ico_insta.png" class="ico"/>
-        <img src="ico_twitter.png" class="ico"/>
-        <img src="ico_facebook.png" class="ico"/>
+        <img src="ico_insta.png" class="ico" alt="Instagram">
+        <img src="ico_twitter.png" class="ico" alt="Twitter">
+        <img src="ico_facebook.png" class="ico" alt="Facebook">
     </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
 </body>
 </html>
