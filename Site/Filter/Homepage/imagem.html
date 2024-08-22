@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formulário de Notícias</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
-    rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 <style>
   * {
     padding: 0;
@@ -65,15 +64,6 @@
     background-color: #45a049;
   }
 
-  input[type="file"] {
-    display: none;
-  }
-
-  #file-label {
-    margin-left: 5px;
-    color: #110f29;
-  }
-
   input[type="text"], input[type="url"], textarea {
     width: 100%;
     padding: 10px;
@@ -107,51 +97,57 @@
   .container h5 {
     font-weight: 500;
   }
+  
   .sidenav {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-        .sidenav a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
-        .sidenav .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-        .openbtn {
-            font-size: 30px;
-            cursor: pointer;
-            background-color: #111;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .openbtn:hover {
-            background-color: #444;
-        }
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .openbtn {
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .openbtn:hover {
+    background-color: #444;
+  }
 </style>
 </head>
 <body>
@@ -160,86 +156,81 @@
     <a href="animation.html">Home</a>
     <a href="agendamentos-pendentes.html">Agendamentos Pendentes</a>
     <a href="agendamentos-aceitos.html">Agendamentos Aceitos</a>
-    <a href="peso.html">informações de peso</a>
-    <a href="imagem.html">Envio de imagens</a>
-    <a href="index.html">Filtro bairros</a>
+    <a href="peso.html">Informações de Peso</a>
+    <a href="imagem.html">Envio de Imagens</a>
+    <a href="index.html">Filtro Bairros</a>
     <a href="formulario.html">Central de Ajuda</a>
     <a href="perfil.html">Sobre Nós</a>
-</div>
-<button class="openbtn" onclick="openNav()">
-    <i class="ri-menu-line"></i>
-</button>
-
-<h1 style="text-align: center; color: #fff;">Formulário de Notícias</h1>
-
-<form id="formulario" enctype="multipart/form-data">
-  <div class="container">
-    <label for="imagem">Imagem:</label><br>
-    <label for="imagem" class="upload-btn">Escolher Imagem</label>
-    <input type="file" id="imagem" name="imagem" accept="image/*">
-    <span id="file-label">Nenhum arquivo selecionado</span><br><br>
-
-    <label for="link_">URL:</label><br>
-    <input type="text" id="link_" name="link_" readonly><br><br>
-
-    <label for="manchete">Manchete:</label><br>
-    <input type="text" id="manchete" name="manchete"><br><br>
-
-    <input type="button" value="Enviar" onclick="uploadImagem()">
   </div>
-</form>
+  
+  <button class="openbtn" onclick="openNav()">
+    <i class="ri-menu-line"></i>
+  </button>
 
-<script>
+  <h1 style="text-align: center; color: #fff;">Formulário de Notícias</h1>
+
+  <form id="formulario">
+    <div class="container">
+
+      <label for="link_">URL:</label><br>
+      <input type="text" id="link_" name="link_"><br><br>
+
+      <label for="manchete">Manchete:</label><br>
+      <input type="text" id="manchete" name="manchete"><br><br>
+
+      <label for="imagem">Link da Imagem:</label><br>
+      <input type="text" id="imagem" name="imagem"><br><br>
+
+      <input type="button" value="Enviar" onclick="enviarDados()">
+    </div>
+  </form>
+
+  <script>
     function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+
+    function enviarDados() {
+      const noticia_id = 1; // Substitua pelo ID da notícia que deseja atualizar
+      const link_ = document.getElementById('link_').value;
+      const manchete = document.getElementById('manchete').value;
+      const imagem = document.getElementById('imagem').value; // Link da imagem
+
+      const updateData = {
+        noticia_id: noticia_id,
+        link_: link_,
+        manchete: manchete,
+        imagem: imagem // Enviando o link da imagem
+      };
+
+      fetch('http://localhost:1212/news/image', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro ao atualizar dados: ' + response.statusText);
         }
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-  document.getElementById('imagem').addEventListener('change', function() {
-    const fileName = this.files[0].name;
-    document.getElementById('file-label').innerText = fileName;
-  });
+        return response.json();
+      })
+      .then(updateResponse => {
+        alert('Dados atualizados com sucesso!');
+      })
+      .catch(error => {
+        console.error('Erro ao atualizar dados:', error);
+        alert('Erro ao atualizar dados. Verifique o console para mais detalhes.');
+      });
+    }
+  </script>
 
-  function uploadImagem() {
-    const arquivo = document.getElementById('imagem').files[0];
-    const formData = new FormData();
-    formData.append('imagem', arquivo);
-
-    const noticia_id = 1;
-    const link_ = document.getElementById('link_').value;
-    const manchete = document.getElementById('manchete').value;
-    const imagem = document.getElementById('imagem').value;
-
-    const updateData = {
-      noticia_id: noticia_id,
-      link_: link_,
-      manchete: manchete,
-      imagem: imagem
-    };
-
-    fetch('http://Samsung_050420:4466/news/image', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updateData)
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro ao atualizar dados: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then(updateResponse => {
-      alert('Imagem enviada e dados atualizados com sucesso!');
-    })
-    .catch(error => {
-      console.error('Erro ao atualizar dados:', error);
-      alert('Erro ao atualizar dados. Verifique o console para mais detalhes.');
-    });
-  }
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </body>
 </html>

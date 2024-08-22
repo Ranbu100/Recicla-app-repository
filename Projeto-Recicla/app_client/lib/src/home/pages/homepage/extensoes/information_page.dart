@@ -17,16 +17,25 @@ class InformationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _launchURL(context, url!);
+        if (url != null) {
+          _launchURL(context, url!);
+        }
       },
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
+          Image.network(
             imagePath,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Center(child: Text('Erro ao carregar imagem'));
+            },
           ),
           Container(
             color: Colors.black.withOpacity(0.5),

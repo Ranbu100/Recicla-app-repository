@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import '../../../auth/stores/auth_store.dart';
 import '../../features/cardmenu.dart';
 import 'extensoes/information_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:mime/mime.dart';
 
 class News {
   final String linkImage;
@@ -20,15 +23,30 @@ class News {
 
 Future<List<News>> _getNews() async {
   final List<News> newsList = [];
-
   final response = await http.get(Uri.parse('http://localhost:1212/news'));
+
   if (response.statusCode == 200) {
     final List<dynamic> jsonData = json.decode(response.body);
+
     for (var data in jsonData) {
+      final linkImagem = data['imagem'];
+      final regex = RegExp(r'/d/([a-zA-Z0-9_-]+)');
+      final match = regex.firstMatch(linkImagem);
+
+      String directImageUrl = '';
+      if (match != null && match.groupCount > 0) {
+        // Extrai o ID do arquivo e cria o link direto
+        final fileId = match.group(1);
+        print(fileId);
+        directImageUrl = 'https://drive.google.com/uc?export=view&id=$fileId';
+      } else {
+        print('ID do arquivo não encontrado.');
+      }
+
       News news = News(
-        linkImage: data['imagem'] ?? '', // Tratamento para campos nulos
-        manchete: data['manchete'] ?? '', // Tratamento para campos nulos
-        linkSite: data['link_'] ?? '', // Tratamento para campos nulos
+        linkImage: directImageUrl,
+        manchete: data['manchete'] ?? '',
+        linkSite: data['link_'] ?? '',
       );
       newsList.add(news);
     }

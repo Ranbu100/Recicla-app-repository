@@ -24,7 +24,7 @@ class NewsResource extends Resource {
         .toList();
 
     final query =
-        'UPDATE "noticias" SET ${columns.join(',')} WHERE noticia_id = @noticia_id RETURNING noticia_id, link_, imagem, manchete;';
+        'UPDATE "Noticias" SET ${columns.join(',')} WHERE noticia_id = @noticia_id RETURNING noticia_id, link_, imagem, manchete;';
 
     final database = injector.get<RemoteDatabase>();
     final result = await database.query(
