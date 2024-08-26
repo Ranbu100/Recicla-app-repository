@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import '../../../auth/stores/auth_store.dart';
 import '../../features/cardmenu.dart';
 import 'extensoes/information_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:mime/mime.dart';
 
 class News {
   final String linkImage;
@@ -22,33 +19,55 @@ class News {
 }
 
 Future<List<News>> _getNews() async {
+  const String userId = '201350626@N08'; // Seu user_id do Flickr
+  const String albumId = '72177720319693499'; // Seu album_id do Flickr
+  const String apiKey =
+      'fe952c882e35062f97be002fe58fb095'; // Sua API Key do Flickr
   final List<News> newsList = [];
-  final response = await http.get(Uri.parse('http://localhost:1212/news'));
 
-  if (response.statusCode == 200) {
-    final List<dynamic> jsonData = json.decode(response.body);
+  // Requisição para as imagens do Flickr
+  final flickrResponse = await http.get(Uri.parse(
+      'https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=$apiKey&photoset_id=$albumId&user_id=$userId&format=json&nojsoncallback=1'));
 
-    for (var data in jsonData) {
-      final linkImagem = data['imagem'];
-      final regex = RegExp(r'/d/([a-zA-Z0-9_-]+)');
-      final match = regex.firstMatch(linkImagem);
+  if (flickrResponse.statusCode == 200) {
+    final flickrData = json.decode(flickrResponse.body);
+    final photos = flickrData['photoset']['photo'];
 
-      String directImageUrl = '';
-      if (match != null && match.groupCount > 0) {
-        // Extrai o ID do arquivo e cria o link direto
-        final fileId = match.group(1);
-        print(fileId);
-        directImageUrl = 'https://drive.google.com/uc?export=view&id=$fileId';
-      } else {
-        print('ID do arquivo não encontrado.');
+    final Map<String, String> imageTitles = {
+      'cachorro': 'Cachorro',
+      'calango': 'Calango',
+      'tartaruga': 'Tartaruga'
+    };
+
+    // Requisição para as manchetes e links
+    final newsResponse =
+        await http.get(Uri.parse('http://localhost:1212/news'));
+
+    if (newsResponse.statusCode == 200) {
+      final List<dynamic> newsData = json.decode(newsResponse.body);
+
+      int index = 0;
+      for (var photo in photos) {
+        final title = photo['title'].toLowerCase();
+        if (imageTitles.containsKey(title) && index < newsData.length) {
+          final farmId = photo['farm'];
+          final serverId = photo['server'];
+          final photoId = photo['id'];
+          final secret = photo['secret'];
+
+          final imageUrl =
+              'https://farm$farmId.staticflickr.com/$serverId/${photoId}_$secret.jpg';
+
+          News news = News(
+            linkImage: imageUrl,
+            manchete: newsData[index]['manchete'] ?? '',
+            linkSite: newsData[index]['link_'] ?? '',
+          );
+
+          newsList.add(news);
+          index++;
+        }
       }
-
-      News news = News(
-        linkImage: directImageUrl,
-        manchete: data['manchete'] ?? '',
-        linkSite: data['link_'] ?? '',
-      );
-      newsList.add(news);
     }
   }
   return newsList;
@@ -74,7 +93,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < 2) {
+      if (_currentPage < _newsList.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -118,9 +137,7 @@ class HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Página Inicial'),
@@ -203,9 +220,7 @@ class HomePageState extends State<HomePage> {
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    const SizedBox(
-                      height: 32,
-                    ),
+                    const SizedBox(height: 32),
                     Center(
                       child: SizedBox(
                         height: carouselHeight,
@@ -256,9 +271,7 @@ class HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const SizedBox(height: 16),
                     const SizedBox(height: 40),
                     const Text(
                       'Serviços',
@@ -289,9 +302,7 @@ class HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 28,
-                    ),
+                    const SizedBox(height: 28),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
