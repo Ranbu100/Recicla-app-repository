@@ -1,6 +1,6 @@
 // Função para carregar os agendamentos
 function fetchags() {
-    axios.get('http://Samsung_050420:4466/ag')
+    axios.get('http://localhost:1212/ag')
         .then(function (response) {
             let ags = response.data;
             // Filtra apenas os agendamentos pendentes
@@ -44,9 +44,9 @@ function displayags(ags) {
         quantidadeResiduo.innerText = "Quantidade de Resíduo: " + ag.quantidade_residuo;
         container.appendChild(quantidadeResiduo);
 
-        let usuarioId = document.createElement('p');
-        usuarioId.innerText = "ID Usuário: " + ag.usuario_id;
-        container.appendChild(usuarioId);
+        let email = document.createElement('p');
+        email.innerText = "ID Usuário: " + ag.email;
+        container.appendChild(email);
 
         let status = document.createElement('span');
         status.classList.add('status-pending');

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recicla - Agendamentos Aceitos</title>
+    <title>Recicla - Agendamentos Pendentes</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
     rel="stylesheet">
     <style>
@@ -55,9 +56,9 @@
             padding: 20px 26px;
         }
 
-        .status-accepted {
-            background-color: #e3f9fc;
-            color: #1da1f2;
+        .status-pending {
+            background-color: #ffe0e0;
+            color: #ff6347;
             padding: 5px 10px;
             border-radius: 5px;
             display: inline-block;
@@ -93,7 +94,7 @@
             border-radius: 3px 3% 0 0;
         }
 
-            .sidenav {
+        .sidenav {
         height: 100%;
         width: 0;
         position: fixed;
@@ -146,46 +147,48 @@
         <a href="animation.html">Home</a>
         <a href="agendamentos-pendentes.html">Agendamentos Pendentes</a>
         <a href="agendamentos-aceitos.html">Agendamentos Aceitos</a>
-        <a href="peso.html">informações de peso</a>
-        <a href="imagem.html">Envio de imagens</a>
-        <a href="index.html">Filtro bairros</a>
+        <a href="peso.html">Informações de Peso</a>
+        <a href="imagem.html">Envio de Imagens</a>
+        <a href="index.html">Filtro Bairros</a>
         <a href="formulario.html">Central de Ajuda</a>
         <a href="perfil.html">Sobre Nós</a>
         </div>
         <button class="openbtn" onclick="openNav()">
-            <i class="ri-menu-line"></i>
+        <i class="ri-menu-line"></i>
         </button>
     <header>
-        <h1>Agendamentos Aceitos</h1>
+        <h1>Agendamentos Pendentes</h1>
     </header>
     <section id="ags">
-        <h2>Lista de Agendamentos Aceitos</h2>
-        <!-- Os cartões de agendamento aceitos serão inseridos aqui -->
+        <h2>Lista de Agendamentos Pendentes</h2>
+        <!-- Os cartões de agendamento pendentes serão inseridos aqui -->
     </section>
 
     <script src="ag.js"></script>
+    
     <script>
-            function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
-    }
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-    }
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
         // Função para carregar os agendamentos
         function fetchags() {
-            axios.get('http://Samsung_050420:4466/ag')
+            axios.get('http://Samsung_050420:1212/ag')
                 .then(function (response) {
                     let ags = response.data;
-                    // Filtra apenas os agendamentos aceitos
-                    let acceptedAgs = ags.filter(ag => ag.status === 'aceito');
-                    displayags(acceptedAgs);
+                    // Filtra apenas os agendamentos pendentes
+                    let pendingAgs = ags.filter(ag => ag.status === 'pendente');
+                    displayags(pendingAgs);
                 })
                 .catch(function (error) {
                     console.error('Erro ao carregar agendamentos:', error);
                 });
         }
 
-        // Função para exibir os agendamentos aceitos na tela
+        // Função para exibir os agendamentos pendentes na tela
         function displayags(ags) {
             let agsContainer = document.getElementById('ags');
             agsContainer.innerHTML = '';
@@ -198,39 +201,70 @@
                 container.classList.add('container');
 
                 let title = document.createElement('h5');
-                title.innerText = "Título: " + ag.title.toUpperCase();
+                title.innerText = "Tipo de Resíduo: " + ag.tipo_residuo;
                 container.appendChild(title);
 
-                if (ag.date) {
+                if (ag.data_agendamento) {
                     let date = document.createElement('p');
-                    date.innerText = "Data: " + new Date(ag.date).toLocaleDateString();
+                    date.innerText = "Data: " + new Date(ag.data_agendamento).toLocaleDateString();
                     container.appendChild(date);
                 }
 
-                if (ag.time) {
+                if (ag.horario) {
                     let time = document.createElement('p');
-                    time.innerText = "Hora: " + ag.time;
+                    time.innerText = "Hora: " + ag.horario;
                     container.appendChild(time);
                 }
 
-                if (ag.location) {
+                if (ag.rua && ag.bairro && ag.cep) {
                     let location = document.createElement('p');
-                    location.innerText = "Local: " + ag.location;
+                    location.innerText = "Local: " + `${ag.rua}, ${ag.bairro}, CEP: ${ag.cep}`;
                     container.appendChild(location);
                 }
 
-                // Adiciona o status aceito
+                if (ag.quantidade_residuo) {
+                    let description = document.createElement('p');
+                    description.innerText = "Quantidade: " + ag.quantidade_residuo;
+                    container.appendChild(description);
+                }
+
+                // Adiciona o status pendente
                 let status = document.createElement('span');
-                status.classList.add('status-accepted');
-                status.innerText = 'Aceito';
+                status.classList.add('status-pending');
+                status.innerText = 'Pendente';
                 container.appendChild(status);
+
+                // Adiciona botões de ação
+                let actionButtons = document.createElement('div');
+                actionButtons.classList.add('action-buttons');
+
+                let acceptButton = document.createElement('button');
+                acceptButton.innerText = 'Aceitar';
+                acceptButton.onclick = function() {
+                    acceptAg(ag.id_agendamento);
+                };
+
+                actionButtons.appendChild(acceptButton);
+                container.appendChild(actionButtons);
 
                 agCard.appendChild(container);
                 agsContainer.appendChild(agCard);
             });
         }
 
-        // Carregar agendamentos aceitos ao carregar a página
+        // Função para aceitar um agendamento usando GET
+        function acceptAg(id) {
+            axios.get(`http://localhost:4466/ag/${id}/accept`)
+                .then(function (response) {
+                    alert('Agendamento aceito com sucesso!');
+                    fetchags(); // Recarregar agendamentos após aceitar
+                })
+                .catch(function (error) {
+                    console.error('Erro ao aceitar agendamento:', error);
+                });
+        }
+
+        // Carregar agendamentos pendentes ao carregar a página
         window.onload = function () {
             fetchags();
         }

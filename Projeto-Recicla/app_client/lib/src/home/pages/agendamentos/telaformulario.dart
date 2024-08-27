@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'calendario.dart';
 import 'multiselected.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,9 @@ class TelaFormulario extends StatefulWidget {
 }
 
 class _TelaFormularioState extends State<TelaFormulario> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _usuarioEmail = '';
+
   DateTime _dateTime = DateTime.now();
   TimeOfDay _timeOfDay = TimeOfDay.now();
   final TextEditingController _descriptionController = TextEditingController();
@@ -74,31 +78,50 @@ class _TelaFormularioState extends State<TelaFormulario> {
   }
 
   Future<void> _submitForm() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? usuarioEmail = prefs.getString('user_email');
+
     const String url =
-        'https://yourapi.com/endpoint'; // Replace with your API endpoint
+        'http://localhost:1212/ag/new'; // Substitua pelo seu endpoint real
     final Map<String, dynamic> data = {
-      'date': '${_dateTime.year}-${_dateTime.month}-${_dateTime.day}',
-      'time': '${_timeOfDay.hour}:${_timeOfDay.minute}',
-      'type': _selectedItems,
-      'description': _descriptionController.text,
+      'data_agendamento': _dateTime.toIso8601String(),
+      'horario': _timeOfDay.format(context),
+      'tipo_residuo': _selectedItems.join(', '),
+      'quantidade_residuo': _descriptionController.text,
+      'email': usuarioEmail,
     };
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(data),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(data),
+      );
 
-    if (response.statusCode == 200) {
-      // Handle successful response
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Agendamento realizado com sucesso!')),
-      );
-    } else {
-      // Handle error response
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao realizar o agendamento.')),
-      );
+      if (response.statusCode == 200) {
+        // Sucesso
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Agendamento realizado com sucesso!')),
+          );
+        }
+      } else {
+        // Erro
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Erro ao realizar o agendamento.')),
+          );
+        }
+      }
+    } catch (e, stackTrace) {
+      // Tratamento de exceções e erros inesperados
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: $e')),
+        );
+      }
+      // Você pode logar o erro ou rastreá-lo usando algum serviço
+      print('Erro: $e\nStackTrace: $stackTrace');
     }
   }
 

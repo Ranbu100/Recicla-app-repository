@@ -31,13 +31,13 @@ model Score {
 
 model Agendamentos {
   id_agendamento Int @id @default(autoincrement())
-  data_agendamento DateTime
-  horario DateTime
+  data_agendamento String
+  horario String
   status String @default("Pendente")
   tipo_residuo String
   quantidade_residuo String
-  usuario_id Int
-  Usuario    User   @relation(fields: [usuario_id], references: [usuario_id])
+  email String
+  Usuario    User   @relation(fields: [email], references: [email])
 }
 
 model Central {

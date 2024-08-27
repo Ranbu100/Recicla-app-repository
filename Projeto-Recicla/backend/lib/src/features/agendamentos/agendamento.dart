@@ -14,7 +14,7 @@ class AgendamentosResource extends Resource {
       Injector injector, ModularArguments arguments) async {
     final database = injector.get<RemoteDatabase>();
     final result = await database.query(
-      'SELECT ag.id_agendamento, ag.data_agendamento, ag.horario, ag.status, ag.tipo_residuo, ag.quantidade_residuo, ag.usuario_id, u.rua, u.bairro, u.cep, u.num_casa, u.usuario_id FROM "Agendamentos" as ag inner join "User" as u on u.usuario_id=ag.usuario_id ;',
+      'SELECT ag.id_agendamento, ag.data_agendamento, ag.horario, ag.status, ag.tipo_residuo, ag.quantidade_residuo, ag.email, u.rua, u.bairro, u.cep, u.num_casa FROM "Agendamentos" as ag inner join "User" as u on u.email=ag.email;',
     );
 
     final listAg = result.map((e) => e['Agendamentos']).toList();
@@ -26,7 +26,7 @@ class AgendamentosResource extends Resource {
     final agParams = (arguments.data as Map).cast<String, dynamic>();
     final database = injector.get<RemoteDatabase>();
     final result = await database.query(
-      'INSERT INTO "Agendamentos" (data_agendamento, horario, status, tipo_residuo, quantidade_residuo, usuario_id) VALUES  (@data_agendamento, @horario, @status, @tipo_residuo, @quantidade_residuo, @usuario_id) RETURNING id_agendamento, data_agendamento, horario, status, tipo_residuo, quantidade_residuo, usuario_id;',
+      'INSERT INTO "Agendamentos" (data_agendamento, horario, tipo_residuo, quantidade_residuo, email) VALUES  (@data_agendamento, @horario, @tipo_residuo, @quantidade_residuo, @email) RETURNING id_agendamento, data_agendamento, horario, status, tipo_residuo, quantidade_residuo, email;',
       variables: agParams,
     );
     final agMap = result.map((element) => element['Agendamentos']).first;

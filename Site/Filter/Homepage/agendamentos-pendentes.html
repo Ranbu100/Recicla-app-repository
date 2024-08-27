@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recicla - Agendamentos Pendentes</title>
@@ -94,49 +95,49 @@
         }
 
         .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #111;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
         }
         .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
         }
         .sidenav a:hover {
-        color: #f1f1f1;
+            color: #f1f1f1;
         }
         .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
         }
         .openbtn {
-        font-size: 30px;
-        cursor: pointer;
-        background-color: #111;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        position: absolute;
-        top: 10px;
-        left: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
         }
         .openbtn:hover {
-        background-color: #444;
+            background-color: #444;
         }
     </style>
 </head>
@@ -146,15 +147,15 @@
         <a href="animation.html">Home</a>
         <a href="agendamentos-pendentes.html">Agendamentos Pendentes</a>
         <a href="agendamentos-aceitos.html">Agendamentos Aceitos</a>
-        <a href="peso.html">informações de peso</a>
-        <a href="imagem.html">Envio de imagens</a>
-        <a href="index.html">Filtro bairros</a>
+        <a href="peso.html">Informações de Peso</a>
+        <a href="imagem.html">Envio de Imagens</a>
+        <a href="index.html">Filtro Bairros</a>
         <a href="formulario.html">Central de Ajuda</a>
         <a href="perfil.html">Sobre Nós</a>
-        </div>
-        <button class="openbtn" onclick="openNav()">
+    </div>
+    <button class="openbtn" onclick="openNav()">
         <i class="ri-menu-line"></i>
-        </button>
+    </button>
     <header>
         <h1>Agendamentos Pendentes</h1>
     </header>
@@ -166,106 +167,128 @@
     <script src="ag.js"></script>
     
     <script>
-            function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
-        }
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-        };
         // Função para carregar os agendamentos
-        function fetchags() {
-            axios.get('http://Samsung_050420:4466/ag')
+        function fetchAgendamentos() {
+            axios.get('http://Samsung_050420:1212/ag')
                 .then(function (response) {
-                    let ags = response.data;
-                    // Filtra apenas os agendamentos pendentes
-                    let pendingAgs = ags.filter(ag => ag.status === 'pendente');
-                    displayags(pendingAgs);
+                    console.log('Dados recebidos da API:', response.data); // Log para verificar os dados
+                    let agendamentos = response.data;
+    
+                    // Filtra apenas os agendamentos com status "Pendente"
+                    let agendamentosPendentes = agendamentos.filter(ag => ag.status.toLowerCase() === 'pendente'.toLowerCase());
+    
+                    // Exibe os agendamentos pendentes na página
+                    displayAgendamentos(agendamentosPendentes);
                 })
                 .catch(function (error) {
                     console.error('Erro ao carregar agendamentos:', error);
+                    // Exibe uma mensagem de erro na página
+                    document.getElementById('ags').innerHTML = '<p>Erro ao carregar agendamentos. Tente novamente mais tarde.</p>';
                 });
         }
-
+    
         // Função para exibir os agendamentos pendentes na tela
-        function displayags(ags) {
-            let agsContainer = document.getElementById('ags');
-            agsContainer.innerHTML = '';
-
-            ags.forEach(function (ag) {
-                let agCard = document.createElement('div');
+        function displayAgendamentos(agendamentos) {
+            const agsContainer = document.getElementById('ags');
+    
+            // Limpa o conteúdo anterior
+            agsContainer.innerHTML = '<h2>Lista de Agendamentos Pendentes</h2>';
+    
+            if (agendamentos.length === 0) {
+                agsContainer.innerHTML += '<p>Nenhum agendamento pendente encontrado.</p>';
+                return;
+            }
+    
+            agendamentos.forEach(function (ag) {
+                // Cria o cartão do agendamento
+                const agCard = document.createElement('div');
                 agCard.classList.add('card');
-
-                let container = document.createElement('div');
+    
+                const container = document.createElement('div');
                 container.classList.add('container');
-
-                let title = document.createElement('h5');
-                title.innerText = "Título: " + ag.title.toUpperCase();
-                container.appendChild(title);
-
-                if (ag.date) {
-                    let date = document.createElement('p');
-                    date.innerText = "Data: " + new Date(ag.date).toLocaleDateString();
-                    container.appendChild(date);
-                }
-
-                if (ag.time) {
-                    let time = document.createElement('p');
-                    time.innerText = "Hora: " + ag.time;
-                    container.appendChild(time);
-                }
-
-                if (ag.location) {
-                    let location = document.createElement('p');
-                    location.innerText = "Local: " + ag.location;
-                    container.appendChild(location);
-                }
-
-                if (ag.description) {
-                    let description = document.createElement('p');
-                    description.innerText = "Descrição: " + ag.description;
-                    container.appendChild(description);
-                }
-
-                // Adiciona o status pendente
-                let status = document.createElement('span');
+    
+                // Tipo de Resíduo
+                const tipoResíduo = document.createElement('h3');
+                tipoResíduo.innerText = ag.tipo_residuo ? `Tipo de Resíduo: ${ag.tipo_residuo}` : 'Tipo de Resíduo: Não especificado';
+                container.appendChild(tipoResíduo);
+    
+                // Data do Agendamento
+                const dataAgendamento = document.createElement('p');
+                const data = new Date(ag.data_agendamento);
+                dataAgendamento.innerText = `Data: ${data.toLocaleDateString()} - ${ag.horario}`;
+                container.appendChild(dataAgendamento);
+    
+                // Quantidade de Resíduo
+                const quantidadeResíduo = document.createElement('p');
+                quantidadeResíduo.innerText = ag.quantidade_residuo ? `Quantidade: ${ag.quantidade_residuo}` : 'Quantidade: Não especificada';
+                container.appendChild(quantidadeResíduo);
+    
+                // E-mail do usuário
+                const emailUsuario = document.createElement('p');
+                emailUsuario.innerText = `Email: ${ag.email}`;
+                container.appendChild(emailUsuario);
+    
+                // Status do Agendamento
+                const status = document.createElement('span');
                 status.classList.add('status-pending');
-                status.innerText = 'Pendente';
+                status.innerText = ag.status;
                 container.appendChild(status);
-
-                // Adiciona botões de ação
-                let actionButtons = document.createElement('div');
+    
+                // Botões de ação
+                const actionButtons = document.createElement('div');
                 actionButtons.classList.add('action-buttons');
-
-                let acceptButton = document.createElement('button');
+    
+                const acceptButton = document.createElement('button');
                 acceptButton.innerText = 'Aceitar';
                 acceptButton.onclick = function() {
-                    acceptAg(ag.id);
+                    acceptAgendamento(ag.id_agendamento);
                 };
-
                 actionButtons.appendChild(acceptButton);
+    
+                const rejectButton = document.createElement('button');
+                rejectButton.innerText = 'Recusar';
+                rejectButton.onclick = function() {
+                    rejectAgendamento(ag.id_agendamento);
+                };
+                actionButtons.appendChild(rejectButton);
+    
                 container.appendChild(actionButtons);
-
                 agCard.appendChild(container);
                 agsContainer.appendChild(agCard);
             });
         }
-
-        // Função para aceitar um agendamento usando GET
-        function acceptAg(id) {
-            axios.get(`http://Samsung_050420:4466/ag`)
+    
+        // Função para aceitar um agendamento
+        function acceptAgendamento(id) {
+            axios.post(`http://Samsung_050420:1212/ag/${id}/aceitar`)
                 .then(function (response) {
                     alert('Agendamento aceito com sucesso!');
-                    fetchags(); // Recarregar agendamentos após aceitar
+                    fetchAgendamentos(); // Recarrega a lista de agendamentos
                 })
                 .catch(function (error) {
                     console.error('Erro ao aceitar agendamento:', error);
+                    alert('Erro ao aceitar agendamento. Tente novamente mais tarde.');
                 });
         }
-
-        // Carregar agendamentos pendentes ao carregar a página
+    
+        // Função para recusar um agendamento
+        function rejectAgendamento(id) {
+            axios.post(`http://Samsung_050420:1212/ag/${id}/recusar`)
+                .then(function (response) {
+                    alert('Agendamento recusado com sucesso!');
+                    fetchAgendamentos(); // Recarrega a lista de agendamentos
+                })
+                .catch(function (error) {
+                    console.error('Erro ao recusar agendamento:', error);
+                    alert('Erro ao recusar agendamento. Tente novamente mais tarde.');
+                });
+        }
+    
+        // Carrega os agendamentos ao carregar a página
         window.onload = function () {
-            fetchags();
+            fetchAgendamentos();
         }
     </script>
+    
 </body>
 </html>
