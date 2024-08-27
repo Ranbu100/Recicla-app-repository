@@ -8,8 +8,11 @@ import '../../core/services/database/remote_database.dart';
 
 class AgendamentosResource extends Resource {
   @override
-  List<Route> get routes =>
-      [Route.get('/ag', getAg), Route.post('/ag/new', createAg)];
+  List<Route> get routes => [
+        Route.get('/ag', getAg),
+        Route.post('/ag/new', createAg),
+        Route.put('/ag/up/:id_agendamento', upAg),
+      ];
   FutureOr<Response> getAg(
       Injector injector, ModularArguments arguments) async {
     final database = injector.get<RemoteDatabase>();
@@ -29,6 +32,17 @@ class AgendamentosResource extends Resource {
       'INSERT INTO "Agendamentos" (data_agendamento, horario, tipo_residuo, quantidade_residuo, email) VALUES  (@data_agendamento, @horario, @tipo_residuo, @quantidade_residuo, @email) RETURNING id_agendamento, data_agendamento, horario, status, tipo_residuo, quantidade_residuo, email;',
       variables: agParams,
     );
+    final agMap = result.map((element) => element['Agendamentos']).first;
+    return Response.ok(jsonEncode(agMap));
+  }
+
+  FutureOr<Response> upAg(ModularArguments arguments, Injector injector) async {
+    final idAgendamento = arguments.params['id_agendamento'];
+    final status = arguments.data['status'];
+    final database = injector.get<RemoteDatabase>();
+    final result = await database.query(
+        'UPDATE "Agendamentos" SET status=@status WHERE id_agendamento=@id_agendamento RETURNING id_agendamento, status ;',
+        variables: {'id_agendamento': idAgendamento, 'status': status});
     final agMap = result.map((element) => element['Agendamentos']).first;
     return Response.ok(jsonEncode(agMap));
   }

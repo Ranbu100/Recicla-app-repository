@@ -167,6 +167,12 @@
     <script src="ag.js"></script>
     
     <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
         // Função para carregar os agendamentos
         function fetchAgendamentos() {
             axios.get('http://Samsung_050420:1212/ag')
@@ -258,31 +264,36 @@
             });
         }
     
-        // Função para aceitar um agendamento
-        function acceptAgendamento(id) {
-            axios.post(`http://Samsung_050420:1212/ag/${id}/aceitar`)
-                .then(function (response) {
-                    alert('Agendamento aceito com sucesso!');
-                    fetchAgendamentos(); // Recarrega a lista de agendamentos
-                })
-                .catch(function (error) {
-                    console.error('Erro ao aceitar agendamento:', error);
-                    alert('Erro ao aceitar agendamento. Tente novamente mais tarde.');
-                });
-        }
-    
-        // Função para recusar um agendamento
-        function rejectAgendamento(id) {
-            axios.post(`http://Samsung_050420:1212/ag/${id}/recusar`)
-                .then(function (response) {
-                    alert('Agendamento recusado com sucesso!');
-                    fetchAgendamentos(); // Recarrega a lista de agendamentos
-                })
-                .catch(function (error) {
-                    console.error('Erro ao recusar agendamento:', error);
-                    alert('Erro ao recusar agendamento. Tente novamente mais tarde.');
-                });
-        }
+       // Função para aceitar um agendamento
+function acceptAgendamento(id) {
+    axios.put(`http://Samsung_050420:1212/ag/up/${id}`, {
+        status: 'Aceito' // Envia o status Aceito
+    })
+    .then(function (response) {
+        alert('Agendamento aceito com sucesso!');
+        fetchAgendamentos(); // Recarrega a lista de agendamentos
+    })
+    .catch(function (error) {
+        console.error('Erro ao aceitar agendamento:', error);
+        alert('Erro ao aceitar agendamento. Tente novamente mais tarde.');
+    });
+}
+
+// Função para recusar um agendamento
+function rejectAgendamento(id) {
+    axios.put(`http://Samsung_050420:1212/ag/up/${id}`, {
+        status: 'Recusado' // Envia o status Recusado
+    })
+    .then(function (response) {
+        alert('Agendamento recusado com sucesso!');
+        fetchAgendamentos(); // Recarrega a lista de agendamentos
+    })
+    .catch(function (error) {
+        console.error('Erro ao recusar agendamento:', error);
+        alert('Erro ao recusar agendamento. Tente novamente mais tarde.');
+    });
+}
+
     
         // Carrega os agendamentos ao carregar a página
         window.onload = function () {
